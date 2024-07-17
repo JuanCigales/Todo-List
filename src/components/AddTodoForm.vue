@@ -19,7 +19,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .add-todo-form {
   display: flex;
   justify-content: space-between;
