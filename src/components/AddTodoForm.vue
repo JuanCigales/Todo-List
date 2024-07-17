@@ -2,13 +2,16 @@
   <form class="add-todo-form">
     <input v-model="todoTitle" type="text" placeholder="Todo Title" />
     <div>
-      <button @click.prevent="$emit('submit', todoTitle)">Add Todo</button>
+      <Btn @click.prevent="$emit('submit', todoTitle)">Add Todo</Btn>
     </div>
   </form>
 </template>
 
 <script>
+import Btn from './Btn.vue';
+
 export default {
+  components:{Btn},
   data() {
     return {
       todoTitle: "",
@@ -30,10 +33,4 @@ export default {
   border: solid 2px var(--accent-color);
 }
 
-.add-todo-form button {
-  background: var(--accent-color);
-  color: var(--text-color);
-  border: none;
-  height: 50px;
-}
 </style>

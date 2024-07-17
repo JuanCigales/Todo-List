@@ -2,13 +2,16 @@
   <div class="todo">
     <p>{{ title }}</p>
     <div>
-      <button @click="$emit('remove')" class="remove-todo-btn">&times;</button>
+      <Btn @click="$emit('remove')" class="remove-todo-btn">&times; </Btn>
     </div>
   </div>
 </template>
 
 <script>
+import Btn from "@/components/Btn.vue";
 export default {
+  components: { Btn },
+
   props: {
     title: {
       required: true,
