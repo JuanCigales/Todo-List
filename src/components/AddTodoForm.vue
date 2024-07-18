@@ -2,7 +2,7 @@
   <form class="add-todo-form">
     <input v-model="todoTitle" type="text" placeholder="Todo Title" />
     <div>
-      <Btn @click.prevent="$emit('submit', todoTitle)">Add Todo</Btn>
+      <Btn class="btn" @click="$emit('submit', todoTitle)">Add Todo</Btn>
     </div>
   </form>
 </template>
@@ -31,6 +31,10 @@ export default {
 .add-todo-form input {
   width: 80%;
   border: solid 2px var(--accent-color);
+}
+
+.btn{
+  height: 50px;
 }
 
 </style>

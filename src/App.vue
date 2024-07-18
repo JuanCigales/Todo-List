@@ -55,6 +55,7 @@ export default {
         title,
         id: Math.floor(Math.random() * 1000),
       });
+      this.showAlert = false; 
     },
     removeTodo(id) {
       this.todos = this.todos.filter((todo) => todo.id !== id);

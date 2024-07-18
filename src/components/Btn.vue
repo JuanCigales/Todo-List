@@ -1,28 +1,40 @@
 <template>
-    <button :style="{backgroundColor}" @click.prevent="$emit('click')">
+    <button :style="{ backgroundColor }" @click.prevent="$emit('click')"
+        :class="{circle: applyCircleClass}"
+    >
         <slot />
     </button>
 </template>
 
 <script>
-export default{
-    props:{
-        type:{
-            default: "danger",
-            validator(value){
-                return ["danger", "warning", "info"].includes(value);
+export default {
+    props: {
+        type: {
+            default: "success",
+            validator(value) {
+                return ["danger", "warning", "info", "success", "secondary"].includes(value);
             },
+        },
+
+        circle:{
+            default: false,
+            type: Boolean,
         },
     },
 
-    computed:{
-        backgroundColor(){
+    computed: {
+        backgroundColor() {
             const options = {
                 danger: "var(--danger-color)",
                 warning: "var(--warning-color)",
                 info: "var(--info-color)",
+                success: "var(--accent-color)",
+                secondary: "var(--secondary-color)"
             }
             return options[this.type];
+        },
+        applyCircleClass(){
+            return this.circle;
         },
     },
 
@@ -32,12 +44,16 @@ export default{
 </script>
 
 <style scoped>
-
-.add-todo-form button {
-  background: var(--accent-color);
-  color: var(--text-color);
-  border: none;
-  height: 50px;
+button {
+    color: var(--text-color);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+.circle {
+    border-radius: 50%;
+}
 </style>
