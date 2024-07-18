@@ -6,7 +6,7 @@
     <EditTodoForm :show="editTodoForm.show" @close="editTodoForm.show = false" @submit="updateTodo"
       v-model="editTodoForm.todo.title" />
 
-    <Alert :message="alert.message" :show="alert.show" :type="alert.type" @close="alert.show = false" />
+    <Alert :message="alert.message" :show="alert.show" :variant="alert.variant" @close="alert.show = false" />
 
     <section>
       <AddTodoForm :isLoading="isPostingTodo" @submit="addTodo" />
@@ -52,7 +52,7 @@ export default {
       alert: {
         show: false,
         message: "",
-        type: "danger",
+        variant: "danger",
       },
       isLoading: false,
       isPostingTodo: false,
@@ -82,10 +82,10 @@ export default {
       this.isLoading = false;
     },
 
-    showAlert(message, type = "danger") {
+    showAlert(message, variant = "danger") {
       this.alert.show = true;
       this.alert.message = message;
-      this.alert.type = type;
+      this.alert.variant = variant;
     },
 
     async addTodo(title) {
