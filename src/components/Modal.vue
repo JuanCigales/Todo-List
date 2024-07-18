@@ -1,5 +1,5 @@
 <template>
-    <div v-if="show" class="modal">
+    <div ref="modal" class="modal">
 
         <!-- Modal content -->
         <div class="modal-content">
@@ -20,11 +20,38 @@
 </template>
 
 <script>
-export default{
-    props:{
-        show:{
+
+export default {
+    props: {
+        show: {
             default: false,
         },
+    },
+
+    data() {
+        return {
+            clickListener: (e) => {
+                if (e.target === this.$refs.modal) {
+                    this.$emit('close');
+                }
+            },
+            closeOnEscapeListener: (e) => {
+                if (e.key === "Escape") {
+                    this.$emit('close');
+                }
+            },
+        }
+    },
+
+    emits: ['close'],
+
+    mounted() {
+        window.addEventListener("click", this.clickListener);
+        window.addEventListener("keydown", this.closeOnEscapeListener);
+    },
+    beforeUnmount() {
+        window.removeEventListener("click", this.clickListener);
+        window.removeEventListener("keydown", this.closeOnEscapeListener);
     },
 };
 </script>
