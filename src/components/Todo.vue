@@ -2,7 +2,7 @@
   <div class="todo">
     <p>{{ title }}</p>
     <div>
-      <Btn circle type="secondary" @click="$emit('remove')" class="btn edit-todo-btn"><Pencil /></Btn>
+      <Btn circle type="secondary" @click="$emit('edit')" class="btn edit-todo-btn"><Pencil /></Btn>
       <Btn circle type="danger" @click="$emit('remove')" class="btn">&times; </Btn>
     </div>
   </div>
@@ -21,7 +21,7 @@ export default {
     },
   },
 
-  emits: ['remove']
+  emits: ['remove', 'edit']
 };
 </script>
 
