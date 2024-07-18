@@ -2,25 +2,23 @@
   <form class="add-todo-form">
     <input v-model="todoTitle" type="text" placeholder="Todo Title" />
     <div>
-      <Btn :disabled="isLoading" class="btn" @click="$emit('submit', todoTitle)">
-        <Spiner v-if="isLoading" /> 
-        <v-else span>Add Todo</v-else>
+      <Btn :disabled="isLoading" type="submit" class="btn" @click.prevent="$emit('submit', todoTitle)">
+        <Spinner v-if="isLoading" />
+        <span v-else>Add Todo</span>
       </Btn>
     </div>
   </form>
 </template>
 
 <script>
-import Btn from './Btn.vue';
-import Spiner from './Spiner.vue';
-
+import Btn from "./Btn.vue";
+import Spinner from "./Spinner.vue";
 export default {
-  components:{Btn, Spiner},
-
-  props:{
+  components: { Btn, Spinner },
+  props: {
     isLoading: {
       default: false,
-      type: Boolean,  
+      type: Boolean
     },
   },
 
@@ -29,7 +27,6 @@ export default {
       todoTitle: "",
     };
   },
-
   emits: ["submit"],
 };
 </script>
@@ -45,8 +42,7 @@ export default {
   border: solid 2px var(--accent-color);
 }
 
-.btn{
+.btn {
   height: 50px;
 }
-
 </style>

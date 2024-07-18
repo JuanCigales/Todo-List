@@ -2,26 +2,34 @@
   <div class="todo">
     <p>{{ title }}</p>
     <div>
-      <Btn circle type="secondary" @click="$emit('edit')" class="btn edit-todo-btn"><Pencil /></Btn>
-      <Btn circle type="danger" @click="$emit('remove')" class="btn">&times; </Btn>
+      <Btn
+        circle
+        variant="secondary"
+        @click="$emit('edit')"
+        class="btn edit-todo-btn"
+      >
+        <Pencil />
+      </Btn>
+      <Btn circle variant="danger" @click="$emit('remove')" class="btn">
+        &times;
+      </Btn>
     </div>
   </div>
 </template>
 
 <script>
-import Btn from "@/components/Btn.vue";
+import Btn from "./Btn.vue";
 import Pencil from "./icons/Pencil.vue";
+
 export default {
   components: { Btn, Pencil },
-
   props: {
     title: {
       required: true,
       type: String,
     },
   },
-
-  emits: ['remove', 'edit']
+  emits: ["remove", "edit"],
 };
 </script>
 
@@ -40,13 +48,13 @@ export default {
   display: flex;
 }
 
+.edit-todo-btn {
+  margin-right: 5px;
+}
+
 .btn {
   height: 40px;
   width: 40px;
   font-size: 30px;
-}
-
-.edit-todo-btn{
-  margin-right: 5px;
 }
 </style>
