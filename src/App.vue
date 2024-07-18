@@ -29,17 +29,20 @@
     />
 
     <section>
-      <AddTodoForm @submit="addTodo" />
+      <AddTodoForm :isLoading="isPostingTodo" @submit="addTodo" />
     </section>
 
     <section>
-      <Todo
-        v-for="todo in todos"
-        :key="todo.id"
-        :title="todo.title"
-        @edit="showEditTodoForm(todo)"
-        @remove="removeTodo(todo.id)"
-      />
+      <Spiner v-if="isLoading" />
+      <div v-else>
+        <Todo
+          v-for="todo in todos"
+          :key="todo.id"
+          :title="todo.title"
+          @edit="showEditTodoForm(todo)"
+          @remove="removeTodo(todo.id)"
+        />
+      </div>
     </section>
   </main>
 </template>
@@ -52,6 +55,7 @@ import Todo from "./components/Todo.vue";
 import Modal from './components/Modal.vue';
 import Btn from "./components/Btn.vue";
 import axios from "axios";
+import Spiner from "./components/Spiner.vue"
 
 export default {
   components: {
@@ -61,6 +65,7 @@ export default {
     Todo,
     Modal,
     Btn,
+    Spiner,
   },
 
   data() {
@@ -72,6 +77,11 @@ export default {
         message: "",
         type: "danger",
       },
+
+      isLoading: false,
+      isPostingTodo: false,
+
+      
       editTodoForm: {
         show: false,
         todo:{
@@ -88,13 +98,15 @@ export default {
 
   methods: {
     async fetchTodos(){
+      this.isLoading = true;
       try{
         const res = await axios.get('http://localhost:8080/todos');
-        this.todos = await res.data;
-      }
+        this.todos = await res.data;        
+      } 
       catch(e){
-        this.showAlert("Failed loading todos, check your DataBase", "warning");   
+        this.showAlert("Failed loading todos", "warning");   
       }
+      this.isLoading = false;
     },
 
     showAlert(message, type = "danger"){
@@ -108,11 +120,13 @@ export default {
         this.showAlert("Todo title is required"); 
         return;
       }
+      this.isPostingTodo = true;
       const res = await axios.post('http://localhost:8080/todos', {
         title
       })
       this.todos.push(res.data);
       this.alert.show = false; 
+      this.isPostingTodo = false;
     },
     showEditTodoForm(todo){
       this.editTodoForm.show = true;

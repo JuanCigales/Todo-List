@@ -1,6 +1,6 @@
 <template>
     <button :style="{ backgroundColor }" @click.prevent="$emit('click')"
-        :class="{circle: applyCircleClass}"
+        :class="{circle: applyCircleClass}" v-bind="$attrs"
     >
         <slot />
     </button>
@@ -53,7 +53,12 @@ button {
     align-items: center;
 }
 
+.btn:disabled{
+    opacity:80%;    
+}
+
 .circle {
     border-radius: 50%;
 }
+
 </style>
