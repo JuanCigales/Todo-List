@@ -2,32 +2,11 @@
   <Navbar />
 
   <main class="container">
-    <Modal :show="editTodoForm.show" @close="editTodoForm.show = false">
-      <template #header>
-        <h2>Edit Todo</h2>
-      </template>
 
-      <template #content>
-        <form class="edit-todo-form">
-          <div><label>Todo Title</label></div>
-          <input type="text" v-model="editTodoForm.todo.title" />
-        </form>
-      </template>
+    <EditTodoForm :show="editTodoForm.show" @close="editTodoForm.show = false" @submit="updateTodo"
+      v-model="editTodoForm.todo.title" />
 
-      <template #footer>
-        <div class="edit-todo-modal-footer">
-          <Btn class="edit-todo-submit-btn" @click="updateTodo">Submit</Btn>
-          <Btn variant="danger" @click="editTodoForm.show = false">Close</Btn>
-        </div>
-      </template>
-    </Modal>
-
-    <Alert
-      :message="alert.message"
-      :show="alert.show"
-      :type="alert.type"
-      @close="alert.show = false"
-    />
+    <Alert :message="alert.message" :show="alert.show" :type="alert.type" @close="alert.show = false" />
 
     <section>
       <AddTodoForm :isLoading="isPostingTodo" @submit="addTodo" />
@@ -36,13 +15,8 @@
     <section>
       <Spinner class="spinner" v-if="isLoading" />
       <div v-else>
-        <Todo
-          v-for="todo in todos"
-          :key="todo.id"
-          :title="todo.title"
-          @remove="removeTodo(todo.id)"
-          @edit="showEditTodoForm(todo)"
-        />
+        <Todo v-for="todo in todos" :key="todo.id" :title="todo.title" @remove="removeTodo(todo.id)"
+          @edit="showEditTodoForm(todo)" />
       </div>
     </section>
   </main>
@@ -57,6 +31,7 @@ import Modal from "./components/Modal.vue";
 import Btn from "./components/Btn.vue";
 import axios from "axios";
 import Spinner from "./components/Spinner.vue";
+import EditTodoForm from "./components/EditTodoForm.vue";
 
 export default {
   components: {
@@ -67,6 +42,7 @@ export default {
     Modal,
     Btn,
     Spinner,
+    EditTodoForm,
   },
 
   data() {
@@ -98,7 +74,7 @@ export default {
     async fetchTodos() {
       this.isLoading = true;
       try {
-        const res = await axios.get("http://localhost:8080/todos");
+        const res = await axios.get("/api/todos");
         this.todos = await res.data;
       } catch (e) {
         this.showAlert("Failed loading todos");
@@ -119,7 +95,7 @@ export default {
       }
 
       this.isPostingTodo = true;
-      const res = await axios.post("http://localhost:8080/todos", {
+      const res = await axios.post("/api/todos", {
         title,
       });
       this.isPostingTodo = false;
@@ -132,16 +108,24 @@ export default {
       this.editTodoForm.todo = { ...todo };
     },
 
-    updateTodo() {
-      const todo = this.todos.find(
-        (todo) => todo.id === this.editTodoForm.todo.id
-      );
-      todo.title = this.editTodoForm.todo.title;
+    async updateTodo() {
+      try {
+        const { id, title } = this.editTodoForm.todo;
+        await axios.put(`/api/todos/${id}`, { title });
+
+        const todo = this.todos.find(
+          (todo) => todo.id === this.editTodoForm.todo.id
+        );
+
+        todo.title = this.editTodoForm.todo.title;
+      } catch (e) {
+        this.showAlert("Failed updating todo");
+      }
       this.editTodoForm.show = false;
     },
 
     async removeTodo(id) {
-      await axios.delete(`http://localhost:8080/todos/${id}`);
+      await axios.delete(`/api/todos/${id}`);
       this.todos = this.todos.filter((todo) => todo.id !== id);
     },
   },
@@ -152,21 +136,5 @@ export default {
 .spinner {
   margin: auto;
   margin-top: 30px;
-}
-
-.edit-todo-form > input {
-  width: 100%;
-  height: 30px;
-  border: 1px solid var(--accent-color);
-}
-
-.edit-todo-modal-footer {
-  display: flex;
-  justify-content: end;
-  padding: 10px;
-}
-
-.edit-todo-submit-btn {
-  margin-right: 5px;
 }
 </style>
