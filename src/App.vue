@@ -32,6 +32,7 @@ import Btn from "./components/Btn.vue";
 import axios from "axios";
 import Spinner from "./components/Spinner.vue";
 import EditTodoForm from "./components/EditTodoForm.vue";
+import { reactive, ref } from "vue";
 
 export default {
   components: {
@@ -45,25 +46,23 @@ export default {
     EditTodoForm,
   },
 
-  data() {
-    return {
-      todoTitle: "",
-      todos: [],
-      alert: {
-        show: false,
-        message: "",
-        variant: "danger",
+  setup(){
+    const todoTitle = ref("");
+    const todo = ref([]);
+    const alert = reactive({
+      show: false,
+      message: "",
+      variant: "danger",
+    });
+    const isLoading = ref(false);
+    const isPostingTodo = ref(false);
+    const editTodoForm = reactive({
+      show: false,
+      todo: {
+        id: 0,
+        title: "",
       },
-      isLoading: false,
-      isPostingTodo: false,
-      editTodoForm: {
-        show: false,
-        todo: {
-          id: 0,
-          title: "",
-        },
-      },
-    };
+    });
   },
 
   created() {
