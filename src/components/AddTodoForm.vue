@@ -10,25 +10,21 @@
   </form>
 </template>
 
-<script>
+<script setup>
+import { ref } from "vue";
 import Btn from "./Btn.vue";
 import Spinner from "./Spinner.vue";
-export default {
-  components: { Btn, Spinner },
-  props: {
-    isLoading: {
-      default: false,
-      type: Boolean
-    },
-  },
 
-  data() {
-    return {
-      todoTitle: "",
-    };
+defineProps({
+  isLoading: {
+    default: false,
+    type: Boolean,
   },
-  emits: ["submit"],
-};
+});
+
+defineEmits(["submit"]);
+
+const todoTitle = ref("");
 </script>
 
 <style scoped>
